@@ -1,0 +1,860 @@
+/* ============================================
+   跑车组件 - 极致炫酷样式
+   ============================================ */
+
+.sports-car-section {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: linear-gradient(180deg, 
+    #0a0a0f 0%,
+    #1a0a2e 20%,
+    #2d1b4e 50%,
+    #1a0a2e 80%,
+    #0a0a0f 100%
+  );
+}
+
+/* 道路容器 */
+.road-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+/* 天空渐变 */
+.sky-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg,
+    #0f0f23 0%,
+    #1a1a3e 30%,
+    #2d1b4e 60%,
+    #1a0a2e 100%
+  );
+}
+
+/* 城市剪影 */
+.city-skyline {
+  position: absolute;
+  bottom: 40%;
+  left: 0;
+  right: 0;
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  opacity: 0.6;
+}
+
+.building {
+  background: linear-gradient(180deg, #1a1a3e 0%, #0f0f23 100%);
+  position: relative;
+}
+
+.building::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      transparent,
+      transparent 10px,
+      rgba(139, 92, 246, 0.1) 10px,
+      rgba(139, 92, 246, 0.1) 12px
+    );
+}
+
+.b1 { width: 40px; height: 60px; }
+.b2 { width: 60px; height: 80px; }
+.b3 { width: 50px; height: 50px; }
+.b4 { width: 70px; height: 90px; }
+.b5 { width: 45px; height: 70px; }
+.b6 { width: 55px; height: 55px; }
+.b7 { width: 80px; height: 85px; }
+.b8 { width: 35px; height: 45px; }
+.b9 { width: 65px; height: 75px; }
+.b10 { width: 50px; height: 65px; }
+
+/* 道路 */
+.road {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg,
+    #1a1a2e 0%,
+    #0f0f1a 50%,
+    #050508 100%
+  );
+  transform: perspective(500px) rotateX(30deg);
+  transform-origin: bottom;
+}
+
+.road-texture {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 50px,
+      rgba(255,255,255,0.02) 50px,
+      rgba(255,255,255,0.02) 51px
+    );
+}
+
+/* 车道线 */
+.lane-lines {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  display: flex;
+  gap: 80px;
+  overflow: hidden;
+}
+
+.lane-line {
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(255,255,255,0.6) 20%,
+    rgba(255,255,255,0.6) 80%,
+    transparent
+  );
+  animation: line-move 1s linear infinite;
+}
+
+@keyframes line-move {
+  from { transform: translateX(100vw); }
+  to { transform: translateX(-100%); }
+}
+
+.road-reflection {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+}
+
+/* 速度线 */
+.speed-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.speed-lines.active {
+  opacity: 1;
+}
+
+.speed-line {
+  position: absolute;
+  left: 0;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,0.8),
+    transparent
+  );
+  animation: speed-line-move linear infinite;
+}
+
+@keyframes speed-line-move {
+  from { transform: translateX(-100px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { transform: translateX(calc(100vw + 100px)); opacity: 0; }
+}
+
+/* 地面粒子 */
+.ground-particles {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ground-particles.active {
+  opacity: 1;
+}
+
+.particle {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  background: rgba(139, 92, 246, 0.6);
+  border-radius: 50%;
+  animation: particle-rise linear infinite;
+}
+
+@keyframes particle-rise {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-200px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   跑车主体样式
+   ============================================ */
+
+.sports-car {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  width: 280px;
+  height: 100px;
+  transform: translateX(-50%) scale(0.8);
+  transform-origin: center bottom;
+  transition: all 0.5s ease;
+}
+
+.sports-car.driving {
+  animation: car-bounce 0.3s ease-in-out infinite;
+}
+
+@keyframes car-bounce {
+  0%, 100% { transform: translateX(-50%) scale(0.8) translateY(0); }
+  50% { transform: translateX(-50%) scale(0.8) translateY(-3px); }
+}
+
+/* 车身光晕 */
+.car-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, var(--glow-color, #ef4444) 0%, transparent 70%);
+  opacity: 0.3;
+  filter: blur(20px);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+/* 底盘阴影 */
+.car-shadow {
+  position: absolute;
+  bottom: -10px;
+  left: 10%;
+  right: 10%;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%);
+  filter: blur(10px);
+}
+
+/* 车身 */
+.car-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%);
+  border-radius: 20px 40px 15px 10px;
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.5),
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    inset 0 -2px 4px rgba(0,0,0,0.3);
+}
+
+/* 红色跑车 */
+.sports-car.red .car-body {
+  background: linear-gradient(145deg, #dc2626 0%, #991b1b 50%, #7f1d1d 100%);
+}
+
+/* 蓝色跑车 */
+.sports-car.blue .car-body {
+  background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+}
+
+/* 金色跑车 */
+.sports-car.gold .car-body {
+  background: linear-gradient(145deg, #d97706 0%, #b45309 50%, #92400e 100%);
+}
+
+/* 紫色跑车 */
+.sports-car.purple .car-body {
+  background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+}
+
+/* 尾翼 */
+.spoiler {
+  position: absolute;
+  top: -15px;
+  right: 20px;
+  width: 60px;
+  height: 25px;
+}
+
+.spoiler-leg {
+  position: absolute;
+  bottom: 0;
+  width: 8px;
+  height: 20px;
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-radius: 2px;
+}
+
+.spoiler-leg.left { left: 5px; }
+.spoiler-leg.right { right: 5px; }
+
+.spoiler-wing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, #4b5563 0%, #374151 100%);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 后车身 */
+.rear-section {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  width: 80px;
+  height: 50px;
+}
+
+.vents {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vent {
+  width: 30px;
+  height: 4px;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* 驾驶舱 */
+.cockpit {
+  position: absolute;
+  top: 15px;
+  left: 80px;
+  width: 100px;
+  height: 45px;
+}
+
+.windshield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 25px;
+  background: linear-gradient(180deg, 
+    rgba(147, 197, 253, 0.4) 0%,
+    rgba(59, 130, 246, 0.2) 100%
+  );
+  border-radius: 20px 20px 0 0;
+  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+.roof {
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  right: 5px;
+  height: 20px;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  border-radius: 0 0 10px 10px;
+}
+
+.side-window {
+  position: absolute;
+  top: 25px;
+  width: 25px;
+  height: 15px;
+  background: linear-gradient(180deg, 
+    rgba(147, 197, 253, 0.3) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  border-radius: 0 0 5px 5px;
+}
+
+.side-window.left { left: 5px; }
+.side-window.right { right: 5px; }
+
+/* 前车身 */
+.front-section {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 90px;
+  height: 50px;
+}
+
+/* 大灯 */
+.headlight {
+  position: absolute;
+  top: 5px;
+  width: 25px;
+  height: 15px;
+}
+
+.headlight.left { left: 5px; }
+.headlight.right { right: 5px; }
+
+.light-beam {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 200px;
+  height: 60px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.2) 50%,
+    transparent 100%
+  );
+  transform: translateY(-50%);
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.sports-car.driving .light-beam {
+  opacity: 1;
+  animation: light-flicker 0.1s ease-in-out infinite;
+}
+
+@keyframes light-flicker {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+.light-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse, #fff 0%, #60a5fa 50%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 20px #60a5fa, 0 0 40px #3b82f6;
+}
+
+/* 进气格栅 */
+.grille {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+}
+
+.grille-line {
+  height: 3px;
+  background: linear-gradient(90deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+  border-radius: 1px;
+}
+
+/* 前唇 */
+.front-lip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-radius: 0 0 10px 10px;
+}
+
+/* 车身线条 */
+.body-line {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(255,255,255,0.3) 20%,
+    rgba(255,255,255,0.3) 80%,
+    transparent
+  );
+}
+
+.side-skirt {
+  position: absolute;
+  bottom: 15px;
+  left: 30px;
+  right: 30px;
+  height: 8px;
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-radius: 4px;
+}
+
+/* 品牌标志 */
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* ============================================
+   车轮样式
+   ============================================ */
+
+.wheel {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  bottom: -5px;
+}
+
+.wheel.rear-left { right: 25px; }
+.wheel.rear-right { right: 25px; z-index: -1; }
+.wheel.front-left { left: 25px; }
+.wheel.front-right { left: 25px; z-index: -1; }
+
+.rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #9ca3af 0deg,
+    #d1d5db 30deg,
+    #9ca3af 60deg,
+    #6b7280 90deg,
+    #9ca3af 120deg,
+    #d1d5db 150deg,
+    #9ca3af 180deg,
+    #6b7280 210deg,
+    #9ca3af 240deg,
+    #d1d5db 270deg,
+    #9ca3af 300deg,
+    #6b7280 330deg,
+    #9ca3af 360deg
+  );
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.3);
+  animation: wheel-spin 0.5s linear infinite;
+}
+
+.sports-car.driving .rim {
+  animation-duration: 0.2s;
+}
+
+@keyframes wheel-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 35%;
+  background: linear-gradient(180deg, #4b5563 0%, #374151 100%);
+  transform-origin: center bottom;
+  margin-left: -2px;
+  margin-top: -35%;
+  border-radius: 2px;
+}
+
+.s1 { transform: rotate(0deg); }
+.s2 { transform: rotate(72deg); }
+.s3 { transform: rotate(144deg); }
+.s4 { transform: rotate(216deg); }
+.s5 { transform: rotate(288deg); }
+
+.center-cap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  background: radial-gradient(circle, #1f2937 0%, #111827 100%);
+  border-radius: 50%;
+  border: 2px solid #4b5563;
+}
+
+.tire {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 8px solid #1f2937;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.4),
+    inset 0 2px 4px rgba(0,0,0,0.5);
+  z-index: -1;
+}
+
+/* 尾灯 */
+.taillight {
+  position: absolute;
+  top: 25px;
+  width: 15px;
+  height: 20px;
+}
+
+.taillight.left { right: 5px; }
+.taillight.right { right: 5px; z-index: -1; }
+
+.taillight-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse, #ef4444 0%, #dc2626 50%, transparent 70%);
+  border-radius: 3px;
+  box-shadow: 0 0 15px #ef4444, 0 0 30px #dc2626;
+  animation: tail-pulse 1s ease-in-out infinite;
+}
+
+@keyframes tail-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* 排气管火焰 */
+.exhaust-flame {
+  position: absolute;
+  right: -30px;
+  top: 60%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.exhaust-flame.active {
+  opacity: 1;
+}
+
+.flame {
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  background: linear-gradient(90deg,
+    #fbbf24 0%,
+    #f59e0b 30%,
+    #ef4444 60%,
+    transparent 100%
+  );
+  border-radius: 0 50% 50% 0;
+  filter: blur(3px);
+  animation: flame-flicker 0.1s ease-in-out infinite;
+}
+
+.f1 { animation-delay: 0s; transform: scale(1); }
+.f2 { animation-delay: 0.03s; transform: scale(0.8) translateY(-5px); }
+.f3 { animation-delay: 0.06s; transform: scale(0.6) translateY(5px); }
+
+@keyframes flame-flicker {
+  0%, 100% { transform: scaleX(1) scaleY(1); opacity: 0.9; }
+  50% { transform: scaleX(1.2) scaleY(0.9); opacity: 1; }
+}
+
+/* 氮气加速效果 */
+.nitro-boost {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.nitro-boost.active {
+  opacity: 1;
+}
+
+.nitro-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 50%;
+  animation: nitro-expand 1s ease-out infinite;
+}
+
+.r1 { width: 100px; height: 60px; animation-delay: 0s; }
+.r2 { width: 140px; height: 84px; animation-delay: 0.3s; }
+.r3 { width: 180px; height: 108px; animation-delay: 0.6s; }
+
+@keyframes nitro-expand {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* 第二辆车 */
+.car-2 {
+  left: 20%;
+  transform: translateX(-50%) scale(0.5);
+  opacity: 0.6;
+  filter: blur(1px);
+}
+
+.car-2 .car-body {
+  background: linear-gradient(145deg, #4b5563 0%, #374151 100%);
+}
+
+.car-2 .rim {
+  animation-duration: 0.4s;
+}
+
+/* 霓虹文字 */
+.neon-text {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.neon-letter {
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #ec4899,
+    0 0 40px #ec4899,
+    0 0 80px #ec4899;
+  animation: neon-flicker 2s ease-in-out infinite;
+}
+
+.neon-letter:nth-child(1) { animation-delay: 0s; }
+.neon-letter:nth-child(2) { animation-delay: 0.2s; }
+.neon-letter:nth-child(3) { animation-delay: 0.4s; }
+.neon-letter:nth-child(4) { animation-delay: 0.6s; }
+.neon-letter:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes neon-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+  52% { opacity: 0.3; }
+  54% { opacity: 1; }
+}
+
+/* 车型选择器 */
+.car-selector {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 100;
+}
+
+.car-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.3);
+  background: var(--car-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.car-btn:hover {
+  transform: scale(1.1);
+  border-color: rgba(255,255,255,0.6);
+}
+
+.car-btn.active {
+  border-color: #fff;
+  box-shadow: 0 0 20px var(--car-color);
+  transform: scale(1.15);
+}
+
+.color-dot {
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+}
+
+/* 版权信息 */
+.footer-credits {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.875rem;
+  z-index: 100;
+}
+
+.footer-credits .sub {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.25rem;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .sports-car {
+    transform: translateX(-50%) scale(0.6);
+  }
+  
+  .sports-car.driving {
+    animation: car-bounce 0.3s ease-in-out infinite;
+  }
+  
+  @keyframes car-bounce {
+    0%, 100% { transform: translateX(-50%) scale(0.6) translateY(0); }
+    50% { transform: translateX(-50%) scale(0.6) translateY(-3px); }
+  }
+  
+  .neon-text {
+    font-size: 2rem;
+  }
+  
+  .car-2 {
+    display: none;
+  }
+}
+
