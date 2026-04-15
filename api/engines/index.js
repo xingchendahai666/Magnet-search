@@ -1,5 +1,5 @@
 /**
- * 搜索引擎入口 - ES Module
+ * 搜索引擎入口
  */
 
 import thepiratebay from './thepiratebay.js';
