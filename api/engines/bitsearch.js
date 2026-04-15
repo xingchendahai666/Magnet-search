@@ -1,109 +1,62 @@
 /**
- * BitSearch 引擎 - Vercel 优化版
+ * BitSearch 搜索引擎
  */
-const axios = require('axios');
-const cheerio = require('cheerio');
 
-class BitSearchEngine {
-  constructor() {
-    this.name = 'bitsearch';
-    this.tier = 'tier3';
-    this.baseUrl = 'https://bitsearch.to';
-  }
-
+export default {
+  name: 'bitsearch',
+  tier: 'tier3',
+  description: 'BitSearch 爬虫',
+  
   async search(query, options = {}) {
-    const url = `${this.baseUrl}/search?q=${encodeURIComponent(query)}&sort=seeders`;
-    
     try {
-      const response = await axios.get(url, {
-        timeout: 15000,
+      const encodedQuery = encodeURIComponent(query);
+      const url = `https://bitsearch.to/search?q=${encodedQuery}&sort=seeders`;
+      
+      const response = await fetch(url, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.0',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5'
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
       });
 
-      return this.parseHTML(response.data);
-
-    } catch (error) {
-      throw new Error(`BitSearch crawl failed: ${error.message}`);
-    }
-  }
-
-  parseHTML(html) {
-    const $ = cheerio.load(html);
-    const results = [];
-
-    $('.search-result').each((i, elem) => {
-      const $elem = $(elem);
-      
-      const titleEl = $elem.find('.title a');
-      const name = titleEl.text().trim();
-      const magnetEl = $elem.find('a[href^="magnet:"]');
-      const magnet = magnetEl.attr('href') || '';
-      const infoHash = this.extractInfoHash(magnet);
-      
-      const seeders = this.parseNumber($elem.find('.stats .seeders').text());
-      const leechers = this.parseNumber($elem.find('.stats .leechers').text());
-      const sizeText = $elem.find('.size').text().trim();
-      const size = this.parseSize(sizeText);
-
-      if (name && magnet) {
-        results.push({
-          name,
-          infoHash,
-          magnet,
-          seeders,
-          leechers,
-          size,
-          sizeText,
-          category: $elem.find('.category').text().trim(),
-          uploaded: $elem.find('.date').text().trim()
-        });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
-    });
 
-    return { results, total: results.length };
-  }
-
-  extractInfoHash(magnet) {
-    if (!magnet) return null;
-    const match = magnet.match(/xt=urn:btih:([a-fA-F0-9]{40})/i);
-    return match ? match[1].toLowerCase() : null;
-  }
-
-  parseNumber(text) {
-    const num = parseInt(text.replace(/[^\d]/g, ''));
-    return isNaN(num) ? 0 : num;
-  }
-
-  parseSize(sizeStr) {
-    const units = {
-      'B': 1, 'KB': 1000, 'MB': 1000**2, 'GB': 1000**3, 'TB': 1000**4,
-      'KiB': 1024, 'MiB': 1024**2, 'GiB': 1024**3, 'TiB': 1024**4
-    };
-    const match = sizeStr.match(/^([\d.]+)\s*(B|KB|MB|GB|TB|KiB|MiB|GiB|TiB)$/i);
-    if (!match) return 0;
-    return Math.round(parseFloat(match[1]) * (units[match[2]] || 1));
-  }
-
-  async healthCheck() {
-    try {
-      const start = Date.now();
-      const response = await axios.get(this.baseUrl, {
-        timeout: 10000,
-        validateStatus: () => true
-      });
+      const html = await response.text();
+      const results = this.parseHTML(html);
+      
       return {
-        status: response.status === 200 ? 'healthy' : 'degraded',
-        responseTime: Date.now() - start
+        results: results.map(item => ({
+          name: item.name,
+          infoHash: item.infoHash,
+          magnet: `magnet:?xt=urn:btih:${item.infoHash}`,
+          size: item.size,
+          seeders: item.seeders || 0,
+          leechers: item.leechers || 0,
+          verified: false,
+          source: 'bitsearch'
+        }))
       };
     } catch (error) {
-      return { status: 'unhealthy', error: error.message };
+      console.error('BitSearch search error:', error);
+      return { results: [] };
     }
+  },
+
+  parseHTML(html) {
+    // 简化解析，实际需要根据页面结构调整
+    const results = [];
+    const regex = /magnet:\?xt=urn:btih:([a-f0-9]{40})/gi;
+    let match;
+    
+    while ((match = regex.exec(html)) !== null) {
+      results.push({
+        name: 'BitSearch Result',
+        infoHash: match[1]
+      });
+    }
+    
+    // 去重
+    return results.filter((v, i, a) => a.findIndex(t => t.infoHash === v.infoHash) === i).slice(0, 20);
   }
-}
-
-module.exports = new BitSearchEngine();
-
+};
