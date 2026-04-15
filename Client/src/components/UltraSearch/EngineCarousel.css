@@ -1,0 +1,139 @@
+.engine-carousel {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.engines-loading {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2rem;
+}
+
+.tier-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tier-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tier-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tier-tab.active {
+  background: var(--tier-color);
+  border-color: var(--tier-color);
+  color: #fff;
+}
+
+.tab-icon {
+  flex-shrink: 0;
+}
+
+.engines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.engine-card {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.engine-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--engine-color);
+}
+
+.engine-card.selected {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--engine-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.engine-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.engine-tier-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.selected-check {
+  color: var(--engine-color);
+}
+
+.engine-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.engine-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+.carousel-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 0.5rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+  border-color: transparent;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .engines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
