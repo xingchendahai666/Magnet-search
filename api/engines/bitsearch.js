@@ -1,8 +1,4 @@
-/**
- * BitSearch 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'bitsearch',
   tier: 'tier3',
   description: 'BitSearch 爬虫',
@@ -30,7 +26,7 @@ export default {
           name: item.name,
           infoHash: item.infoHash,
           magnet: `magnet:?xt=urn:btih:${item.infoHash}`,
-          size: item.size,
+          size: item.size || 'Unknown',
           seeders: item.seeders || 0,
           leechers: item.leechers || 0,
           verified: false,
@@ -44,7 +40,6 @@ export default {
   },
 
   parseHTML(html) {
-    // 简化解析，实际需要根据页面结构调整
     const results = [];
     const regex = /magnet:\?xt=urn:btih:([a-f0-9]{40})/gi;
     let match;
@@ -56,7 +51,6 @@ export default {
       });
     }
     
-    // 去重
     return results.filter((v, i, a) => a.findIndex(t => t.infoHash === v.infoHash) === i).slice(0, 20);
   }
 };
