@@ -1,17 +1,27 @@
 /**
  * 引擎列表 API
  */
-module.exports = (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  
-  const engineList = [
-    { name: 'thepiratebay', tier: 'tier1', description: 'The Pirate Bay Official API' },
-    { name: 'nyaa', tier: 'tier2', description: 'Nyaa.si RSS Feed' },
-    { name: 'bitsearch', tier: 'tier3', description: 'BitSearch Crawler' },
-    { name: 'solidtorrents', tier: 'tier3', description: 'Solid Torrents' },
-    { name: 'yts', tier: 'tier1', description: 'YTS API' },
-    { name: 'eztv', tier: 'tier2', description: 'EZTV API' }
-  ];
 
-  res.json({ engines: engineList, total: engineList.length });
-};
+import engines from './engines/index.js';
+
+export default async function handler(req, res) {
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  const engineList = Object.entries(engines).map(([name, engine]) => ({
+    name,
+    tier: engine.tier || 'tier4',
+    description: engine.description || name
+  }));
+
+  res.json({
+    engines: engineList,
+    total: engineList.length
+  });
+}
