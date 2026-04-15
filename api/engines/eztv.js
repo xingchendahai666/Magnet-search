@@ -1,8 +1,4 @@
-/**
- * EZTV 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'eztv',
   tier: 'tier2',
   description: 'EZTV API',
