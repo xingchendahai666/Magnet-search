@@ -1,12 +1,8 @@
 {
   "version": 2,
   "name": "magnet-search",
-  "buildCommand": "cd client && npm run build",
-  "outputDirectory": "client/build",
-  "installCommand": "npm install && cd client && npm install",
-  
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/client/build/index.html" }
-  ]
+  "framework": "create-react-app",
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "installCommand": "npm install"
 }
