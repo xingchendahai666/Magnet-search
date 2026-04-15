@@ -1,13 +1,19 @@
 /**
- * 引擎统一导出
+ * 搜索引擎入口 - ES Module
  */
-module.exports = {
-  thepiratebay: require('./thepiratebay'),
-  nyaa: require('./nyaa'),
-  bitsearch: require('./bitsearch'),
-  // 添加更多引擎...
-  solidtorrents: require('./bitsearch'), // 临时使用相同实现
-  kickass: require('./bitsearch'),
-  yts: require('./thepiratebay'),
-  eztv: require('./thepiratebay')
+
+import thepiratebay from './thepiratebay.js';
+import nyaa from './nyaa.js';
+import bitsearch from './bitsearch.js';
+import solidtorrents from './solidtorrents.js';
+import yts from './yts.js';
+import eztv from './eztv.js';
+
+export default {
+  thepiratebay,
+  nyaa,
+  bitsearch,
+  solidtorrents,
+  yts,
+  eztv
 };
