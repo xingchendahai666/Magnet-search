@@ -1,8 +1,4 @@
-/**
- * YTS 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'yts',
   tier: 'tier1',
   description: 'YTS API',
@@ -49,4 +45,3 @@ export default {
     }
   }
 };
-
