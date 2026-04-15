@@ -1,15 +1,11 @@
-/**
- * 搜索引擎入口
- */
+const thepiratebay = require('./thepiratebay');
+const nyaa = require('./nyaa');
+const bitsearch = require('./bitsearch');
+const solidtorrents = require('./solidtorrents');
+const yts = require('./yts');
+const eztv = require('./eztv');
 
-import thepiratebay from './thepiratebay.js';
-import nyaa from './nyaa.js';
-import bitsearch from './bitsearch.js';
-import solidtorrents from './solidtorrents.js';
-import yts from './yts.js';
-import eztv from './eztv.js';
-
-export default {
+module.exports = {
   thepiratebay,
   nyaa,
   bitsearch,
