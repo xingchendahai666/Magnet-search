@@ -1,8 +1,4 @@
-/**
- * Nyaa 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'nyaa',
   tier: 'tier2',
   description: 'Nyaa.si RSS Feed',
@@ -55,7 +51,6 @@ export default {
       const link = this.extractTag(itemContent, 'link');
       const description = this.extractTag(itemContent, 'description');
       
-      // 从链接提取 infoHash
       const infoHashMatch = link.match(/\/([a-f0-9]{40})/i);
       const infoHash = infoHashMatch ? infoHashMatch[1] : null;
       
