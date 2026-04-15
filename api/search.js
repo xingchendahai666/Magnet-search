@@ -1,11 +1,13 @@
 /**
- * 聚合搜索 API - Vercel Serverless Function
+ * 聚合搜索 API - Vercel Serverless Function (ES Module)
  */
-const engines = require('./engines');
 
-module.exports = async (req, res) => {
-  // CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
+// ✅ 修复：使用 ES Module 导入
+import engines from './engines/index.js';
+
+export default async function handler(req, res) {
+  // CORS 头
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
@@ -15,11 +17,13 @@ module.exports = async (req, res) => {
     return;
   }
 
-  if (req.method !== 'POST') {
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { query, engines: selectedEngines = [], categories = [], limit = 50 } = req.body;
+  // ✅ 支持 GET 和 POST 两种请求方式
+  const params = req.method === 'POST' ? req.body : req.query;
+  const { query, engines: selectedEngines = [], categories = [], limit = 50 } = params;
 
   if (!query || query.trim().length === 0) {
     return res.status(400).json({ error: 'Search query is required' });
@@ -53,11 +57,11 @@ module.exports = async (req, res) => {
       
       if (result.status === 'fulfilled') {
         const value = result.value;
-        allResults.push(...value.results.map(r => ({
+        allResults.push(...(value.results || []).map(r => ({
           ...r,
           _meta: { engine: engineName, discoveredAt: Date.now() }
         })));
-        engineStats.push({ name: engineName, status: 'success', count: value.results.length });
+        engineStats.push({ name: engineName, status: 'success', count: value.results?.length || 0 });
       } else {
         engineStats.push({ name: engineName, status: 'error', error: result.reason?.message || 'Unknown error' });
       }
@@ -65,11 +69,11 @@ module.exports = async (req, res) => {
 
     // 去重和排序
     const uniqueResults = deduplicateResults(allResults);
-    const sortedResults = smartSort(uniqueResults).slice(0, limit);
+    const sortedResults = smartSort(uniqueResults).slice(0, parseInt(limit) || 50);
 
     res.json({
       searchId,
-      query,
+      query: query.trim(),
       totalResults: sortedResults.length,
       results: sortedResults,
       engineStats,
@@ -84,14 +88,14 @@ module.exports = async (req, res) => {
       searchId 
     });
   }
-};
+}
 
 async function searchWithEngine(name, engine, query, categories) {
   const startTime = Date.now();
   try {
     const results = await engine.search(query, { categories });
     return {
-      results: results.results || [],
+      results: results?.results || [],
       responseTime: Date.now() - startTime
     };
   } catch (error) {
