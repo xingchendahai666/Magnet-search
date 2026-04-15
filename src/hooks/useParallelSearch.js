@@ -1,11 +1,10 @@
 /**
  * 并行搜索 Hook - Vercel 优化版
  */
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:3001/api';
+// ✅ 修复：直接使用相对路径，Vercel 上永远用 /api
+const API_BASE = '/api';
 
 export const useParallelSearch = () => {
   const [results, setResults] = useState([]);
@@ -27,9 +26,13 @@ export const useParallelSearch = () => {
     const startTime = Date.now();
 
     try {
+      // ✅ 创建 AbortController 用于取消请求
+      abortControllerRef.current = new AbortController();
+
       const response = await fetch(`${API_BASE}/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: abortControllerRef.current.signal,
         body: JSON.stringify({
           query: params.query,
           engines: params.engines || [],
@@ -39,7 +42,8 @@ export const useParallelSearch = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -58,7 +62,9 @@ export const useParallelSearch = () => {
       );
 
     } catch (err) {
-      setError(err.message);
+      if (err.name !== 'AbortError') {
+        setError(err.message);
+      }
     } finally {
       setIsSearching(false);
     }
@@ -74,6 +80,7 @@ export const useParallelSearch = () => {
   const clearResults = useCallback(() => {
     setResults([]);
     setStats({ total: 0, enginesUsed: 0, duration: 0 });
+    setError(null);
   }, []);
 
   return {
@@ -88,4 +95,3 @@ export const useParallelSearch = () => {
     clearResults
   };
 };
-
