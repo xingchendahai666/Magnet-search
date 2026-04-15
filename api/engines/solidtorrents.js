@@ -1,8 +1,4 @@
-/**
- * SolidTorrents 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'solidtorrents',
   tier: 'tier3',
   description: 'Solid Torrents',
@@ -23,29 +19,13 @@ export default {
       }
 
       const html = await response.text();
-      const results = this.parseHTML(html);
       
       return {
-        results: results.map(item => ({
-          name: item.name,
-          infoHash: item.infoHash,
-          magnet: `magnet:?xt=urn:btih:${item.infoHash}`,
-          size: item.size || 'Unknown',
-          seeders: item.seeders || 0,
-          leechers: item.leechers || 0,
-          verified: false,
-          source: 'solidtorrents'
-        }))
+        results: []
       };
     } catch (error) {
       console.error('SolidTorrents search error:', error);
       return { results: [] };
     }
-  },
-
-  parseHTML(html) {
-    // 简化实现
-    return [];
   }
 };
-
