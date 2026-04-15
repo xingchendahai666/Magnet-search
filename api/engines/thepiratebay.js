@@ -1,15 +1,10 @@
-/**
- * ThePirateBay 搜索引擎
- */
-
-export default {
+module.exports = {
   name: 'thepiratebay',
   tier: 'tier1',
   description: '海盗湾官方 API',
   
   async search(query, options = {}) {
     try {
-      // 使用原生 fetch 替代 axios
       const encodedQuery = encodeURIComponent(query);
       const url = `https://apibay.org/q.php?q=${encodedQuery}&cat=0`;
       
@@ -24,8 +19,6 @@ export default {
       }
 
       const data = await response.json();
-      
-      // 过滤无效结果
       const results = Array.isArray(data) ? data.filter(item => item.id !== '0') : [];
       
       return {
