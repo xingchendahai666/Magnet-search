@@ -1,12 +1,11 @@
 /**
- * 聚合搜索 API - Vercel Serverless Function (ES Module)
+ * 聚合搜索 API - Vercel Serverless Function
  */
 
-// ✅ 修复：使用 ES Module 导入
 import engines from './engines/index.js';
 
 export default async function handler(req, res) {
-  // CORS 头
+  // CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -17,11 +16,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (req.method !== 'POST' && req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // ✅ 支持 GET 和 POST 两种请求方式
+  // 支持 GET 和 POST
   const params = req.method === 'POST' ? req.body : req.query;
   const { query, engines: selectedEngines = [], categories = [], limit = 50 } = params;
 
@@ -120,3 +115,4 @@ function smartSort(results) {
     return scoreB - scoreA;
   });
 }
+
