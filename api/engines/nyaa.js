@@ -1,3 +1,7 @@
+/**
+ * Nyaa 搜索引擎
+ */
+
 module.exports = {
   name: 'nyaa',
   tier: 'tier2',
@@ -56,9 +60,8 @@ module.exports = {
       
       if (title && infoHash) {
         items.push({
-          title: title.replace(/<!
- $$CDATA
- $$|$$ $$ >/g, ''),
+          // ✅ 修复：使用简单字符串替换，避免复杂正则
+          title: this.cleanTitle(title),
           infoHash,
           magnet: `magnet:?xt=urn:btih:${infoHash}`,
           size: this.extractSize(description),
@@ -69,6 +72,16 @@ module.exports = {
     }
     
     return items;
+  },
+
+  // ✅ 新增：安全的标题清理函数
+  cleanTitle(title) {
+    if (!title) return '';
+    // 简单替换 CDATA 标签，不用复杂正则
+    return title
+      .replace('<![CDATA[', '')
+      .replace(']]>', '')
+      .trim();
   },
 
   extractTag(xml, tagName) {
